@@ -1,54 +1,48 @@
 package calculadora.cli
 
+import calculadora.core.Operacao
 import java.util.*
 
-private val scanner = Scanner(System.`in`)
+class Terminal {
 
-fun lerDouble(label: String): Double {
-    var valor = 0.0
-    do {
-        var valorInvalido = true
-        try {
-            println(label)
-            valor = scanner.nextDouble()
-            valorInvalido = false
-        } catch (ex: InputMismatchException) {
-            scanner.nextLine()
-            println("Valor inválido!")
-        }
-    } while (valorInvalido)
+    private val scanner = Scanner(System.`in`)
 
-    return valor
-}
+    fun lerValor(label: String): Double {
+        println("> $label")
+        return scanner.nextDouble()
+    }
 
-fun lerOperacao(): Int {
-    var operacao: Int
-    do {
-        println("Informe a operação desejada!")
-        println("1 - Somar")
-        println("2 - Subtrair")
-        println("3 - Multiplicar")
-        println("4 - Dividir")
-        operacao = scanner.nextInt()
-        val isInvalido = operacao !in 1..4
+    fun lerOperacao(): Operacao {
+        var valor: Operacao?
+        do {
+            println("> Informe qual operação deseja realizar")
+            for (value in Operacao.values()) {
+                println("${value.opcao} - ${value.descricao}")
+            }
+            valor = Operacao.of(scanner.nextInt())
+        } while (valor == null)
+        return valor
+    }
+
+    fun lerSimOuNao(label: String): Boolean {
+        var valor: Int
+        do {
+            println("> $label")
+            println(": 1 - Sim")
+            println(": 2 - Não")
+            valor = scanner.nextInt()
+        } while (isInvalido(valor, 1..2))
+        return valor == 1
+    }
+
+    private fun isInvalido(continuar: Int, range: IntRange): Boolean {
+        val isInvalido = continuar !in range
         if (isInvalido) {
-            println("Informe uma opção válida!")
+            println(">> Opção inválida")
         }
-    } while (isInvalido)
-    return operacao
+        return isInvalido
+    }
+
 }
 
-fun lerSimOuNao(label: String): Boolean {
-    do {
-        println("$label - 1-Sim / 2-Não")
-        val opcaoEscolhida = scanner.nextInt()
-        val opcaoInvalida = opcaoEscolhida !in 1..2
-        if (opcaoInvalida) {
-            println("Opção Inválida! Informe uma opção válida!")
-        } else {
-            return opcaoEscolhida == 1
-        }
-    } while (opcaoInvalida)
-    return false
-}
 

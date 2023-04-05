@@ -2,14 +2,24 @@ package calculadora.core
 
 import java.time.LocalDateTime
 
-private var resultados: Array<String> = emptyArray()
+class Resultados {
 
-fun salvarResultado(resultado: String) {
-    resultados += "${LocalDateTime.now()}: $resultado"
-}
+    private val calculos = mutableMapOf<LocalDateTime, Resultado>()
 
-fun listarResultados() {
-    for (resultado in resultados.reversed()) {
-        println(resultado)
+    fun registrar(resultado: Resultado) {
+        calculos.put(LocalDateTime.now(), resultado)
     }
+
+    fun imprimir() {
+        println("+----------------------------------------------------------------------+")
+        println("   DataHora                   - Resultado                              ")
+        println("+----------------------------------------------------------------------+")
+        for (entry in calculos.entries.reversed()) {
+            println("   ${entry.key} - ${entry.value}")
+            println("+----------------------------------------------------------------------+")
+        }
+    }
+
 }
+
+
